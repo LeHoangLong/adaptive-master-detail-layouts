@@ -1,26 +1,14 @@
 import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 
-class Item {
+class Item extends StatelessWidget {
   Item({
     @required this.title,
-    @required this.subtitle,
+    @required this.child,
   });
 
-  final String title;
-  final String subtitle;
+  final Widget title;
+  final Widget child;
+  @override
+  Widget build(BuildContext context) => this.child;
 }
-
-final List<Item> items = <Item>[
-  Item(
-    title: 'Item 1',
-    subtitle: 'This is the first item.',
-  ),
-  Item(
-    title: 'Item 2',
-    subtitle: 'This is the second item.',
-  ),
-  Item(
-    title: 'Item 3',
-    subtitle: 'This is the third item.',
-  ),
-];

@@ -5,32 +5,24 @@ import 'package:adaptive_master_detail_layouts/item_details.dart';
 import 'package:adaptive_master_detail_layouts/item_listing.dart';
 import 'package:flutter/material.dart';
 
-class MasterDetailContainer extends StatefulWidget {
-  @override
-  _ItemMasterDetailContainerState createState() =>
-      _ItemMasterDetailContainerState();
-}
+class MasterDetailContainer extends StatelessWidget {
+  final int splitScreenBreakPoint;
+  final List<Item> children;
+  final ValueChanged<int> onItemSelected;
+  final int selectedIndex;
 
-class _ItemMasterDetailContainerState extends State<MasterDetailContainer> {
-  static const int kTabletBreakpoint = 600;
-
-  Item _selectedItem;
+  MasterDetailContainer({
+    @required this.children,
+    @required this.onItemSelected,
+    this.selectedIndex = 0,
+    this.splitScreenBreakPoint = 600,
+  }) : super();
 
   Widget _buildMobileLayout() {
     return ItemListing(
-      itemSelectedCallback: (item) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return ItemDetails(
-                isInTabletLayout: false,
-                item: item,
-              );
-            },
-          ),
-        );
-      },
+      itemSelectedCallback: onItemSelected,
+      selectedItem: children[selectedIndex],
+      items: children,
     );
   }
 
@@ -42,12 +34,9 @@ class _ItemMasterDetailContainerState extends State<MasterDetailContainer> {
           child: Material(
             elevation: 4.0,
             child: ItemListing(
-              itemSelectedCallback: (item) {
-                setState(() {
-                  _selectedItem = item;
-                });
-              },
-              selectedItem: _selectedItem,
+              itemSelectedCallback: onItemSelected,
+              selectedItem: children[selectedIndex],
+              items: children,
             ),
           ),
         ),
@@ -55,7 +44,7 @@ class _ItemMasterDetailContainerState extends State<MasterDetailContainer> {
           flex: 3,
           child: ItemDetails(
             isInTabletLayout: true,
-            item: _selectedItem,
+            item: children[selectedIndex],
           ),
         ),
       ],
@@ -67,7 +56,7 @@ class _ItemMasterDetailContainerState extends State<MasterDetailContainer> {
     Widget content;
     var shortestSide = MediaQuery.of(context).size.shortestSide;
 
-    if (shortestSide < kTabletBreakpoint) {
+    if (shortestSide < splitScreenBreakPoint) {
       content = _buildMobileLayout();
     } else {
       content = _buildTabletLayout();
