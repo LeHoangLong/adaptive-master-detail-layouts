@@ -5,48 +5,82 @@ import 'package:adaptive_master_detail_layouts/item_details.dart';
 import 'package:adaptive_master_detail_layouts/item_listing.dart';
 import 'package:flutter/material.dart';
 
-class MasterDetailContainer extends StatelessWidget {
+class MasterDetailContainer extends StatefulWidget {
   final int splitScreenBreakPoint;
   final List<Item> children;
   final ValueChanged<int> onItemSelected;
-  final int selectedIndex;
+  final Widget appBar;
+  final double sideBarWidth;
 
   MasterDetailContainer({
     @required this.children,
     @required this.onItemSelected,
-    this.selectedIndex = 0,
+    @required this.appBar,
     this.splitScreenBreakPoint = 600,
+    this.sideBarWidth = 200,
   }) : super();
 
-  Widget _buildMobileLayout() {
+  @override
+  _MasterDetailContainerState createState() => _MasterDetailContainerState();
+}
+
+class _MasterDetailContainerState extends State<MasterDetailContainer> {
+  int _selectedIndex = 0;
+
+  void _itemSelectedCallbackHandler(int selectedIndex) {
+    setState(() {
+      _selectedIndex = selectedIndex;
+    });
+    widget.onItemSelected(selectedIndex);
+  }
+
+  Widget _buildMobileLayout(BuildContext context) {
     return ItemListing(
-      itemSelectedCallback: onItemSelected,
-      selectedItem: children[selectedIndex],
-      items: children,
+      itemSelectedCallback: (selectedIndex) {
+        setState(() {
+          _selectedIndex = selectedIndex;
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return ItemDetails(
+                isInTabletLayout: false,
+                item: widget.children[selectedIndex],
+              );
+            },
+          ),
+        );
+      },
+      selectedItem: widget.children[_selectedIndex],
+      items: widget.children,
     );
   }
 
   Widget _buildTabletLayout() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Flexible(
-          flex: 1,
+        Container(
+          width: widget.sideBarWidth,
           child: Material(
             elevation: 4.0,
             child: ItemListing(
-              itemSelectedCallback: onItemSelected,
-              selectedItem: children[selectedIndex],
-              items: children,
+              itemSelectedCallback: _itemSelectedCallbackHandler,
+              selectedItem: widget.children[_selectedIndex],
+              items: widget.children,
             ),
           ),
         ),
-        Flexible(
-          flex: 3,
-          child: ItemDetails(
-            isInTabletLayout: true,
-            item: children[selectedIndex],
+        Expanded(
+          child: Container(
+            alignment: Alignment.topLeft,
+            child: ItemDetails(
+              isInTabletLayout: true,
+              item: widget.children[_selectedIndex],
+            ),
           ),
-        ),
+        )
       ],
     );
   }
@@ -56,17 +90,18 @@ class MasterDetailContainer extends StatelessWidget {
     Widget content;
     var shortestSide = MediaQuery.of(context).size.shortestSide;
 
-    if (shortestSide < splitScreenBreakPoint) {
-      content = _buildMobileLayout();
+    if (shortestSide < widget.splitScreenBreakPoint) {
+      content = _buildMobileLayout(context);
     } else {
       content = _buildTabletLayout();
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Master-detail flow sample'),
+      appBar: widget.appBar,
+      body: Container(
+        alignment: Alignment.topLeft,
+        child: content,
       ),
-      body: content,
     );
   }
 }

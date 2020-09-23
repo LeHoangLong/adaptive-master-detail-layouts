@@ -17,14 +17,14 @@ class ItemDetails extends StatelessWidget {
       return Container();
     }
     if (isInTabletLayout) {
-      return Center(child: item.child);
+      return item.child;
     }
 
     return Scaffold(
       appBar: AppBar(
         title: item.title,
       ),
-      body: Center(child: item.child),
+      body: item.child,
     );
   }
 }

@@ -27,17 +27,23 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MasterDetailContainer(
-      children: [
-        Item(title: Text('item 1'), child: Text('detail 1')),
-        Item(title: Text('item 2'), child: Text('detail 2')),
-      ],
-      onItemSelected: (int idx) {
-        setState(() {
-          _selectedItemIndex = idx;
-        });
-      },
-      selectedIndex: _selectedItemIndex,
-      splitScreenBreakPoint: 600,
-    );
+        children: [
+          Item(
+              title: Text('item 1'),
+              child: Center(
+                  child: Container(
+                child: Text('detail 1'),
+              ))),
+          Item(title: Text('item 2'), child: Text('detail 2')),
+        ],
+        onItemSelected: (int idx) {
+          setState(() {
+            _selectedItemIndex = idx;
+          });
+        },
+        splitScreenBreakPoint: 600,
+        appBar: AppBar(
+          title: Text('Demo'),
+        ));
   }
 }
