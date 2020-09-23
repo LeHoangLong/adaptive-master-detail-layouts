@@ -59,11 +59,12 @@ class _MasterDetailContainerState extends State<MasterDetailContainer> {
 
   Widget _buildTabletLayout() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Container(
+          color: Theme.of(context).backgroundColor,
           width: widget.sideBarWidth,
           child: Material(
+            color: Theme.of(context).backgroundColor,
             elevation: 4.0,
             child: ItemListing(
               itemSelectedCallback: _itemSelectedCallbackHandler,
@@ -98,10 +99,7 @@ class _MasterDetailContainerState extends State<MasterDetailContainer> {
 
     return Scaffold(
       appBar: widget.appBar,
-      body: Container(
-        alignment: Alignment.topLeft,
-        child: content,
-      ),
+      body: content,
     );
   }
 }

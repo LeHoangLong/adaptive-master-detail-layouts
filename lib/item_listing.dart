@@ -21,10 +21,16 @@ class ItemListing extends StatelessWidget {
     return ListView(
       children: items.map((item) {
         int idx = items.indexOf(item);
-        return ListTile(
-          title: item.title,
-          onTap: () => itemSelectedCallback(idx),
-          selected: selectedItem != null && selectedItem == item,
+        bool selected = selectedItem != null && selectedItem == item;
+        return Ink(
+          color: selected ? Theme.of(context).focusColor : Colors.transparent,
+          child: ListTile(
+            leading: item.icon,
+            title: item.title,
+            onTap: () => itemSelectedCallback(idx),
+            selected: selected,
+            hoverColor: Theme.of(context).hoverColor,
+          ),
         );
       }).toList(),
     );
