@@ -58,31 +58,35 @@ class _MasterDetailContainerState extends State<MasterDetailContainer> {
   }
 
   Widget _buildTabletLayout() {
-    return Row(
-      children: <Widget>[
-        Container(
-          color: Theme.of(context).backgroundColor,
-          width: widget.sideBarWidth,
-          child: Material(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
             color: Theme.of(context).backgroundColor,
-            elevation: 4.0,
-            child: ItemListing(
-              itemSelectedCallback: _itemSelectedCallbackHandler,
-              selectedItem: widget.children[_selectedIndex],
-              items: widget.children,
+            width: widget.sideBarWidth,
+            child: Material(
+              color: Theme.of(context).backgroundColor,
+              elevation: 4.0,
+              child: ItemListing(
+                itemSelectedCallback: _itemSelectedCallbackHandler,
+                selectedItem: widget.children[_selectedIndex],
+                items: widget.children,
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
-            alignment: Alignment.topLeft,
-            child: ItemDetails(
-              isInTabletLayout: true,
-              item: widget.children[_selectedIndex],
+          Expanded(
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: ItemDetails(
+                isInTabletLayout: true,
+                item: widget.children[_selectedIndex],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
