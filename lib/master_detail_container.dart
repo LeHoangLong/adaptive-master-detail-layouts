@@ -9,7 +9,7 @@ class MasterDetailContainer extends StatefulWidget {
   final int splitScreenBreakPoint;
   final List<Item> children;
   final ValueChanged<int> onItemSelected;
-  final Widget appBar;
+  final PreferredSizeWidget appBar;
   final double sideBarWidth;
 
   MasterDetailContainer({
